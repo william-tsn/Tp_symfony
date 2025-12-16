@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des recettes{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📚 Toutes les recettes</h1>
+    {% if is_granted('ROLE_USER') %}
+        <a href=" path('app_recipe_new') " class="btn btn-success">+ Nouvelle recette</a>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for recipe in recipes %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"> recipe.title </h5>
+                    <p class="card-text"> recipe.description|slice(0, 100) ...</p>
+                    <p class="text-muted">⏱️  recipe.duration  min</p>
+                    <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="btn btn-primary">Voir la recette</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Aucune recette pour le moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}

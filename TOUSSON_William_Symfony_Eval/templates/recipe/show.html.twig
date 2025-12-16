@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} recipe.title {% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-8">
+        <h1> recipe.title </h1>
+        
+        <div class="mb-4">
+            <p class="text-muted">⏱️ Durée :  recipe.duration  minutes</p>
+        </div>
+
+        <h3>Description</h3>
+        <p> recipe.description </p>
+
+        <h3>Ingrédients</h3>
+        <pre class="bg-light p-3"> recipe.ingredients </pre>
+
+        <div class="mt-4">
+            <a href=" path('app_recipe_index') " class="btn btn-secondary">Retour à la liste</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}" class="btn btn-warning">Modifier</a>
+                <form method="post" action="{{ path('app_recipe_delete', {'id': recipe.id}) }}" style="display:inline;">
+                    <input type="hidden" name="_token" value=" csrf_token('delete' ~ recipe.id) ">
+                    <button class="btn btn-danger" onclick="return confirm('Êtes-vous sûr ?')">Supprimer</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
