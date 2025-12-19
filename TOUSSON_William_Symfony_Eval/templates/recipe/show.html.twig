@@ -20,25 +20,27 @@
             <h1>{{ recipe.strMeal }}</h1>
 
             <p class="text-muted mb-3">
-                Catégorie : {{ recipe.strCategory }} |
-                Origine : {{ recipe.strArea }}
+                🍽️ Catégorie : {{ recipe.strCategory }} |
+                🌍 Origine : {{ recipe.strArea }}
             </p>
 
             {% if is_granted('ROLE_USER') %}
-                <form method="post" action="{{ path('app_favorite_toggle', { id: recipe.idMeal }) }}">
+                <form method="post"
+                      action="{{ path('app_favorite_toggle', { id: recipe.idMeal }) }}">
                     {% if isFavorite %}
-                        <button type="submit" class="btn btn-danger mb-3">
+                        <button class="btn btn-danger mb-3">
                             Retirer des favoris
                         </button>
                     {% else %}
-                        <button type="submit" class="btn btn-warning mb-3">
+                        <button class="btn btn-warning mb-3">
                             Ajouter aux favoris
                         </button>
                     {% endif %}
                 </form>
             {% else %}
-                <p>
-                    <a href="{{ path('app_login') }}">Connectez-vous</a> pour gérer les favoris
+                <p class="text-muted">
+                    <a href="{{ path('app_login') }}">Connectez-vous</a>
+                    pour ajouter cette recette aux favoris
                 </p>
             {% endif %}
         </div>
@@ -66,7 +68,7 @@
     </div>
 
     <a href="{{ path('app_recipes') }}" class="btn btn-secondary">
-        Retour à la liste
+        ⬅ Retour à la liste
     </a>
 
 </div>
