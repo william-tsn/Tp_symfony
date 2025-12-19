@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes favoris{% endblock %}
+
+{% block body %}
+<h1>Mes recettes favorites</h1>
+
+<div class="row">
+    {% for fav in favorites %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ fav.image }}" class="card-img-top">
+                <div class="card-body">
+                    <h5>{{ fav.title }}</h5>
+                    <a href="/recipes/{{ fav.recipeId }}" class="btn btn-primary">
+                        Voir
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Aucun favori</p>
+    {% endfor %}
+</div>
+{% endblock %}

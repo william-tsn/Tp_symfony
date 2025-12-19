@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recettes
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>🍽️ Recettes (API)</h1>
+
+		<form method="get" action="{{ path('app_recipes') }}" class="row g-2 mb-4">
+			<div class="col-md-8">
+				<input type="text" name="q" class="form-control" placeholder="Rechercher une recette..." value="{{ query }}">
+			</div>
+
+			<div class="col-md-2 d-grid">
+				<button type="submit" class="btn btn-primary">
+					Rechercher
+				</button>
+			</div>
+
+			<div class="col-md-2 d-grid">
+				<a href="{{ path('app_recipes') }}" class="btn btn-outline-secondary">
+					Reset
+				</a>
+			</div>
+		</form>
+		<div class="row">
+			{% for recipe in recipes %}
+				<div class="col-md-4 mb-4">
+					<div class="card h-100">
+						<img src="{{ recipe.strMealThumb }}" class="card-img-top">
+
+						<div class="card-body">
+							<h5 class="card-title">{{ recipe.strMeal }}</h5>
+
+							<a href="/recipes/{{ recipe.idMeal }}" class="btn btn-primary">
+								Voir la recette
+							</a>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<p>Aucune recette trouvée</p>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

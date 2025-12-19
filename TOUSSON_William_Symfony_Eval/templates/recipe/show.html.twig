@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ recipe.strMeal }}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <img
+                src="{{ recipe.strMealThumb }}"
+                alt="{{ recipe.strMeal }}"
+                class="img-fluid rounded shadow"
+            >
+        </div>
+
+        <div class="col-md-6">
+            <h1>{{ recipe.strMeal }}</h1>
+
+            <p class="text-muted mb-3">
+                Catégorie : {{ recipe.strCategory }} |
+                Origine : {{ recipe.strArea }}
+            </p>
+
+            {% if is_granted('ROLE_USER') %}
+                <form method="post" action="{{ path('app_favorite_toggle', { id: recipe.idMeal }) }}">
+                    {% if isFavorite %}
+                        <button type="submit" class="btn btn-danger mb-3">
+                            Retirer des favoris
+                        </button>
+                    {% else %}
+                        <button type="submit" class="btn btn-warning mb-3">
+                            Ajouter aux favoris
+                        </button>
+                    {% endif %}
+                </form>
+            {% else %}
+                <p>
+                    <a href="{{ path('app_login') }}">Connectez-vous</a> pour gérer les favoris
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h3>Description</h3>
+        <p>{{ recipe.strInstructions }}</p>
+    </div>
+
+    <div class="mb-4">
+        <h3>Ingrédients</h3>
+        <ul class="list-group">
+            {% for i in 1..20 %}
+                {% set ingredient = attribute(recipe, 'strIngredient' ~ i) %}
+                {% set measure = attribute(recipe, 'strMeasure' ~ i) %}
+
+                {% if ingredient is not empty %}
+                    <li class="list-group-item">
+                        {{ ingredient }}{% if measure %} – {{ measure }}{% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href="{{ path('app_recipes') }}" class="btn btn-secondary">
+        Retour à la liste
+    </a>
+
+</div>
+{% endblock %}
