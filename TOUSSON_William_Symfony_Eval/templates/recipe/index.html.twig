@@ -14,7 +14,7 @@
                 name="q"
                 class="form-control"
                 placeholder="Rechercher une recette..."
-                value="{{ query }}"
+                value="{{ query|default('') }}"
             >
         </div>
 
@@ -57,8 +57,7 @@
                                 action="{{ path('app_favorite_toggle', { id: recipe.idMeal }) }}"
                                 class="mt-auto"
                             >
-                                <input type="hidden" name="title" value="{{ recipe.strMeal }}">
-                                <input type="hidden" name="image" value="{{ recipe.strMealThumb }}">
+                                {% set favoriteIds = favoriteIds|default([]) %}
 
                                 {% if recipe.idMeal in favoriteIds %}
                                     <button class="btn btn-danger w-100">

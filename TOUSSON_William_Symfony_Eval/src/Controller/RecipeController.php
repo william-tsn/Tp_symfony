@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\FavoriteRepository;
 use App\Service\RecipeApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,10 +13,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecipeController extends AbstractController
 {
     #[Route('', name: 'app_recipes')]
-    public function index(RecipeApiService $api): Response
-    {
+    public function index(
+        Request $request,
+        RecipeApiService $api,
+        FavoriteRepository $favoriteRepository
+    ): Response {
+        // 🔍 Recherche
+        $query = $request->query->get('q');
+
+        // 📡 API
+        $recipes = $api->getRecipes($query);
+
+        // ⭐ Favoris de l'utilisateur
+        $favoriteIds = [];
+
+        if ($this->getUser()) {
+            $favorites = $favoriteRepository->findBy([
+                'user' => $this->getUser()
+            ]);
+
+            foreach ($favorites as $favorite) {
+                $favoriteIds[] = $favorite->getRecipeId();
+            }
+        }
+
         return $this->render('recipe/index.html.twig', [
-            'recipes' => $api->getRecipes(),
+            'recipes'     => $recipes,
+            'query'       => $query,
+            'favoriteIds' => $favoriteIds,
         ]);
     }
 
@@ -31,12 +56,13 @@ class RecipeController extends AbstractController
             throw $this->createNotFoundException('Recette introuvable');
         }
 
+        // ⭐ Favori ou non
         $isFavorite = false;
 
         if ($this->getUser()) {
             $isFavorite = (bool) $favoriteRepository->findOneBy([
                 'recipeId' => $id,
-                'user' => $this->getUser()
+                'user'     => $this->getUser()
             ]);
         }
 
