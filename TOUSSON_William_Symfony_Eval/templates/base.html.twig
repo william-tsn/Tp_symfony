@@ -1,58 +1,66 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {% block title %}Mes Recettes{% endblock %}
-    </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}Mes Recettes
+			{% endblock %}
+		</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
 
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">🍳 Mes Recettes</a>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<div class="container">
+				<a class="navbar-brand" href="{{ path('app_home') }}">🍳 Mes Recettes</a>
 
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
-            </li>
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+					</li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_recipes') }}">Recettes</a>
-            </li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_recipes') }}">Recettes</a>
+					</li>
 
-            {% if is_granted('ROLE_USER') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_favorites') }}">Favoris</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
+					{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item">
+							<a class="nav-link text-warning fw-bold" href="{{ path('admin_favorites') }}">
+								 Admin – Favoris
+							</a>
+						</li>
+					{% endif %}
+					{% if is_granted('ROLE_USER') %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_favorites') }}">Favoris</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+		</nav>
 
-<div class="container mt-4">
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+		<div class="container mt-4">
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success">{{ message }}</div>
+			{% endfor %}
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">{{ message }}</div>
+			{% endfor %}
 
-    {% block body %}{% endblock %}
-</div>
+			{% block body %}{% endblock %}
+		</div>
 
-</body>
+	</body>
 </html>

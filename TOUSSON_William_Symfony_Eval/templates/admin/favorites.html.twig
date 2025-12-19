@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin – Gestion des favoris{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <h1>⭐ Gestion des favoris (Admin)</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Utilisateur</th>
+                <th>Recette</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for fav in favorites %}
+            <tr>
+                <td>{{ fav.user.email }}</td>
+                <td>{{ fav.title }}</td>
+                <td>
+                    <img src="{{ fav.image }}" alt="" width="80">
+                </td>
+                <td>
+                    <form method="post"
+                          action="{{ path('admin_favorite_delete', { id: fav.id }) }}"
+                          onsubmit="return confirm('Supprimer ce favori ?');">
+                        <button class="btn btn-danger btn-sm">
+                            Supprimer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="text-center">
+                    Aucun favori
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
